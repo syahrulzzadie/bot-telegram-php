@@ -6,12 +6,16 @@ session_start();
 
 class Telegram
 {
+    protected static $token;
     protected static $apiUrl;
     protected static $offset;
     protected static $sessionName = 'bot_telegram_update_id';
+    protected static $dataMessages = [];
+    protected static $dataCommands = [];
 
     public static function init($token)
     {
+        self::$token = $token;
         self::$offset = isset($_SESSION[self::$sessionName]) ? $_SESSION[self::$sessionName] : 0;
         self::$apiUrl = "https://api.telegram.org/bot".$token."/";
         return new self;
@@ -72,7 +76,39 @@ class Telegram
                 self::setLastId($dataUpdates);
             }
         }
-        return $dataUpdates;
+        self::$dataMessages = $dataUpdates;
+        return new self;
+    }
+
+    public static function addCommand($keyword, $callback)
+    {
+        self::$dataCommands[] = [
+            'keyword' => $keyword." ",
+            'callback' => $callback
+        ];
+        return new self;
+    }
+
+    public static function execute()
+    {
+        foreach (self::$dataMessages as $msg) {
+            $message = $msg['message'];
+            foreach (self::$dataCommands as $cmd) {
+                $command = $cmd['keyword'];
+                $callback = $cmd['callback'];
+                if (strpos($message,$command) !== false) {
+                    $value = substr($message,strlen($command),strlen($message));
+                    if (strlen($value) > 1) {
+                        $init = self::init(self::$token);
+                        $callback(true,$value,$init);
+                    } else {
+                        $callback(false,null,null);
+                    }
+                } else {
+                    $callback(false,null,null);
+                }
+            }
+        }
     }
 
     public static function sendMessage($chatId, $textMessage)
