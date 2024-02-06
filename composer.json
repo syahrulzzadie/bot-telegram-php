@@ -1,0 +1,22 @@
+{
+    "name": "syahrulzzadie/bot-telegram-php",
+    "description": "Bot Telegram PHP",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0",
+    "authors": [
+        {
+            "name": "Syahrul Adiguna Kurniawan",
+            "email": "syahrulzzadie@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "syahrulzzadie\\BotTelegram\\" : "src/"
+        }
+    },
+    "require": {
+        "php": "^5.6"
+    }
+}
