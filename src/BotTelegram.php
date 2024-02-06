@@ -4,11 +4,11 @@ namespace syahrulzzadie\BotTelegram;
 
 class SyahrulJs
 {
-    protected $apiUrl;
+    protected static $apiUrl;
 
     public static function init($token)
     {
-        self::apiUrl = "https://api.telegram.org/bot".$token."/";
+        self::$apiUrl = "https://api.telegram.org/bot".$token."/";
         return new self;
     }
 
@@ -68,7 +68,7 @@ class SyahrulJs
         } else {
             return [
                 'status' => false,
-                'message' => curl_error($ch);
+                'message' => curl_error($ch)
             ];
         }
         curl_close($ch);
