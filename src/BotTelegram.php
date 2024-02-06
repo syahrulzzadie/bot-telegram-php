@@ -2,7 +2,7 @@
 
 namespace syahrulzzadie\BotTelegram;
 
-class SyahrulJs
+class BotTelegram
 {
     protected static $apiUrl;
 
