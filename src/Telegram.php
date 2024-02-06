@@ -16,7 +16,7 @@ class Telegram
     {
         $data = [];
         $method = 'getUpdates';
-        $url = self::apiUrl . $method;
+        $url = self::$apiUrl . $method;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
@@ -42,7 +42,7 @@ class Telegram
     public static function sendMessage($chatId, $textMessage)
     {
         $method = 'sendMessage';
-        $url = self::apiUrl . $method;
+        $url = self::$apiUrl . $method;
         $messageData = array(
             'chat_id' => $chatId,
             'text' => $textMessage
