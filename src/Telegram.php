@@ -98,10 +98,10 @@ class Telegram
                 $command = $cmd['keyword'];
                 $callback = $cmd['callback'];
                 if (strpos($message,$command) !== false) {
-                    $value = substr($message,strlen($command),strlen($message));
-                    if (strlen($value) > 1) {
+                    $params = explode(" ",$message);
+                    if (count($params) >= 2) {
                         $init = self::init(self::$token);
-                        $callback(true,$value,$chatId,$init);
+                        $callback(true,$params,$chatId,$init);
                     } else {
                         $callback(false,null,null,null);
                     }
