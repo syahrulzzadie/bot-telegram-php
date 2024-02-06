@@ -14,7 +14,7 @@ class Telegram
 
     public static function getUpdates()
     {
-        $data = [];
+        $dataUpdates = [];
         $method = 'getUpdates';
         $url = self::$apiUrl . $method;
         $ch = curl_init($url);
@@ -28,7 +28,7 @@ class Telegram
                     $message = $update['message'];
                     $chatId = $message['chat']['id'];
                     $messageText = $message['text'];
-                    $data[] = [
+                    $dataUpdates[] = [
                         'chat_id' => $chatId,
                         'message' => $messageText
                     ];
@@ -36,7 +36,7 @@ class Telegram
             }
         }
         curl_close($ch);
-        return $data;
+        return $dataUpdates;
     }
 
     public static function sendMessage($chatId, $textMessage)
