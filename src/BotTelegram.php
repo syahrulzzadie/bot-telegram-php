@@ -8,7 +8,7 @@ class SyahrulJs
 
     public static function init($token)
     {
-        self::apiUrl = $apiUrl = "https://api.telegram.org/bot".$token."/";
+        self::apiUrl = "https://api.telegram.org/bot".$token."/";
         return new self;
     }
 
