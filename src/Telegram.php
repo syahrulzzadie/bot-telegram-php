@@ -92,6 +92,7 @@ class Telegram
     public static function execute()
     {
         foreach (self::$dataMessages as $msg) {
+            $chatId = $msg['chat_id'];
             $message = $msg['message'];
             foreach (self::$dataCommands as $cmd) {
                 $command = $cmd['keyword'];
@@ -100,12 +101,12 @@ class Telegram
                     $value = substr($message,strlen($command),strlen($message));
                     if (strlen($value) > 1) {
                         $init = self::init(self::$token);
-                        $callback(true,$value,$init);
+                        $callback(true,$value,$chatId,$init);
                     } else {
-                        $callback(false,null,null);
+                        $callback(false,null,null,null);
                     }
                 } else {
-                    $callback(false,null,null);
+                    $callback(false,null,null,null);
                 }
             }
         }
