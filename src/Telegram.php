@@ -2,40 +2,63 @@
 
 namespace syahrulzzadie\BotTelegram;
 
+session_start();
+
 class Telegram
 {
     protected static $apiUrl;
+    protected static $offset;
+    protected static $sessionName = 'bot_telegram_update_id';
 
     public static function init($token)
     {
+        self::$offset = isset($_SESSION[self::$sessionName]) ? $_SESSION[self::$sessionName] : 0;
         self::$apiUrl = "https://api.telegram.org/bot".$token."/";
         return new self;
+    }
+
+    private static function setLastId($data = [])
+    {
+        if (count($data) > 0) {
+            $lastId = 0;
+            foreach ($data as $item) {
+                if (intval($item['id']) > $lastId) {
+                    $lastId = intval($item['id']);
+                }
+            }
+            self::$offset = $lastId;
+            $_SESSION[self::$sessionName] = $lastId;
+        }
     }
 
     public static function getUpdates()
     {
         $dataUpdates = [];
-        $method = 'getUpdates';
-        $url = self::$apiUrl . $method;
+        $method = 'getUpdates?offset=';
+        $offset = intval(self::$offset + 1);
+        $url = self::$apiUrl . $method . $offset;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
+        curl_close($ch);
         if (curl_errno($ch) == 0) {
             $data = json_decode($response, true);
             if ($data['ok']) {
                 $updates = $data['result'];
                 foreach ($updates as $update) {
                     $message = $update['message'];
+                    $updateId = $update['update_id'];
                     $chatId = $message['chat']['id'];
                     $messageText = $message['text'];
                     $dataUpdates[] = [
+                        'id' => $updateId,
                         'chat_id' => $chatId,
                         'message' => $messageText
                     ];
                 }
+                self::setLastId($dataUpdates);
             }
         }
-        curl_close($ch);
         return $dataUpdates;
     }
 
@@ -52,6 +75,7 @@ class Telegram
         curl_setopt($ch, CURLOPT_POSTFIELDS, $messageData);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($ch);
+        curl_close($ch);
         if (curl_errno($ch) == 0) {
             $data = json_decode($response, true);
             if ($data['ok']) {
@@ -71,6 +95,5 @@ class Telegram
                 'message' => curl_error($ch)
             ];
         }
-        curl_close($ch);
     }
 }
