@@ -59,7 +59,7 @@ class Telegram
                     }
                     $editedMessage = isset($update['edited_message']) ? $update['edited_message'] : false;
                     if ($editedMessage) {
-                        $updateId = $editedMessage['update_id'];
+                        $updateId = $update['update_id'];
                         $chatId = $editedMessage['chat']['id'];
                         $messageText = $editedMessage['text'];
                         $dataUpdates[] = [
