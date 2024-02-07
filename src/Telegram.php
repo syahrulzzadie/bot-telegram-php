@@ -80,11 +80,13 @@ class Telegram
         return new self;
     }
 
-    public static function addCommand($keyword, $callback)
+    public static function addCommand($keyword, $callback, $hasParam = true)
     {
+        $keyword = $hasParam ? $keyword." " : $keyword;
         self::$dataCommands[] = [
-            'keyword' => $keyword." ",
-            'callback' => $callback
+            'keyword' => $keyword,
+            'callback' => $callback,
+            'has_param' => $hasParam
         ];
         return new self;
     }
@@ -98,10 +100,11 @@ class Telegram
             foreach (self::$dataCommands as $cmd) {
                 $command = $cmd['keyword'];
                 $callback = $cmd['callback'];
+                $hasParam = $cmd['has_param'];
                 if (strpos($message,$command) !== false) {
                     $message = str_replace($command,"",$message);
                     $params = explode(" ",$message);
-                    if (count($params) >= 1) {
+                    if (count($params) >= 1 && $hasParam) {
                         $callback(true,$params,$chatId,$init);
                     } else {
                         $callback(true,false,$chatId,$init);
