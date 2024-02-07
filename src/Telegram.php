@@ -104,10 +104,10 @@ class Telegram
                     if (count($params) >= 1) {
                         $callback(true,$params,$chatId,$init);
                     } else {
-                        $callback(false,null,$chatId,$init);
+                        $callback(true,false,$chatId,$init);
                     }
                 } else {
-                    $callback(false,null,$chatId,$init);
+                    $callback(false,false,$chatId,$init);
                 }
             }
         }
