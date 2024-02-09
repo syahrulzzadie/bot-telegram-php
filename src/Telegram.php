@@ -127,6 +127,7 @@ class Telegram
                 }
             }
         }
+        return new self;
     }
 
     public static function sendMessage($chatId, $textMessage)
