@@ -21,6 +21,14 @@ class Telegram
         return new self;
     }
 
+    public static function initOffset($token, $offset)
+    {
+        self::$token = $token;
+        self::$offset = $offset;
+        self::$apiUrl = "https://api.telegram.org/bot".$token."/";
+        return new self;
+    }
+
     private static function setLastId($data = [])
     {
         if (count($data) > 0) {
