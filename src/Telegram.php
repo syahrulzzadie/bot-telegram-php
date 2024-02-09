@@ -29,6 +29,11 @@ class Telegram
         return new self;
     }
 
+    public static function getLastId()
+    {
+        return self::$offset;
+    }
+
     private static function setLastId($data = [])
     {
         if (count($data) > 0) {
